@@ -24,8 +24,8 @@ export function Map({sites, onHover}: MapProps) {
     const convertCoordinates = (latitude: number, longitude: number) => {
         // Simple conversion logic for latitude/longitude to x/y on your SVG map
         // Customize based on your SVG map dimensions
-        const x = ((longitude + 180) / 360) * mapWidth * xMultiplier; // Example scaling factor
-        const y = ((90 - latitude) / 180) * mapHeigh * yMultiplier;  // Example scaling factor
+        const x = ((longitude + 180) / 360) * mapWidth * xMultiplier; 
+        const y = ((90 - latitude) / 180) * mapHeigh * yMultiplier;  
         return { x, y };
       };
 
