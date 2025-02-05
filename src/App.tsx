@@ -2,17 +2,15 @@ import { useEffect, useState } from 'react'
 import { loadCsvData } from './utils'
 import { Map } from './components/Map'
 import './App.css'
+import { SiteRaw, Site } from './modals/CustomTypes';
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [sites, setSites] = useState([]);
-  const [year, setYear] = useState(0);
-  const [hoveredSite, setHoveredSite] = useState(null);
+  const [sites, setSites] = useState<Site[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await loadCsvData('./src/assets/data.csv');
+        const data: SiteRaw[] = await loadCsvData('./src/assets/data.csv');
         // Convert year and coordinates to numbers for filtering and rendering
         const parsedData = data.map((site) => ({
           ...site,
@@ -32,7 +30,8 @@ function App() {
 
   return (
     <>
-      <Map sites={sites}></Map>
+    <input type="range" min="0" max="100" value="50" className="slider" id="myRange"></input>
+      <Map sites={sites} onHover={()=>{}}></Map>
     </>
   )
 }

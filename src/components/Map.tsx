@@ -1,4 +1,4 @@
-import worldMap from "../assets/world_map.svg";
+import worldMap from "../assets/world_map_1.svg";
 import { Site } from "../modals/CustomTypes";
 
 
@@ -15,26 +15,29 @@ export function Map({sites, onHover}: MapProps) {
 
     const pointSize = 5;
     const mapWidth = 1280;
-    const mapHeigh = 720;
-
-    //magic number
-    const xMultiplier = 1.2;
-    const yMultiplier = 1.08;
-
+    const mapHeight = 720;
+    
     const convertCoordinates = (latitude: number, longitude: number) => {
-        // Simple conversion logic for latitude/longitude to x/y on your SVG map
-        // Customize based on your SVG map dimensions
-        const x = ((longitude + 180) / 360) * mapWidth * xMultiplier; 
-        const y = ((90 - latitude) / 180) * mapHeigh * yMultiplier;  
-        return { x, y };
-      };
+          // Convert longitude to x directly:
+          const x = ((longitude + 180) / 360) * mapWidth;
+
+          // For latitude, we first convert degrees to radians.
+          const latRad = (latitude * Math.PI) / 180;
+
+          // Mercator projection formula for y.
+          const mercN = Math.log(Math.tan((Math.PI / 4) + (latRad / 2)));
+          // Scale the mercator coordinate to the map's height.
+          const y = (mapHeight / 2) - (mapWidth * mercN / (2 * Math.PI));
+
+          return { x, y };
+            };
 
   return (
-    <>
+    <div style={{ position: 'relative', width: `${mapWidth}px`, height: `${mapHeight}px`, border:"solid black" }}>
       <img
         src={worldMap}
         alt="World Map"
-        style={{ width: `${mapWidth}px`, color: "red", height:`${mapHeigh}px` }}
+        style={{ width: `${mapWidth}px`, color: "red", height:`${mapHeight}px`, bottom:"0px"}}
       ></img>
       {sites.map((site: Site) => {
         const { x, y } = convertCoordinates(site.latitude, site.longitude);
@@ -56,6 +59,6 @@ export function Map({sites, onHover}: MapProps) {
           ></div>
         );
       })}
-    </>
+    </div>
   );
 }
